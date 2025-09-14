@@ -31,6 +31,13 @@ class FinancialPlanner:
         )
 
     @agent
+    def debt_advisor(self) -> Agent:
+        return Agent(
+            config=self.agents_config["debt_advisor"],
+            verbose=True,
+        )
+
+    @agent
     def insurance_advisor(self) -> Agent:
         return Agent(
             config=self.agents_config["insurance_advisor"],
@@ -55,6 +62,10 @@ class FinancialPlanner:
     @task
     def investment_task(self) -> Task:
         return Task(config=self.tasks_config["investment_task"])
+
+    @task
+    def debt_task(self) -> Task:
+        return Task(config=self.tasks_config["debt_task"])
 
     @task
     def insurance_task(self) -> Task:

@@ -26,7 +26,7 @@ emergency_fund_task:
 
 investment_task:
   description: >
-    Based on the summarized user data provided in the context, provide tailored investment advice.
+    Based on the summarized user data provided in the context and emergebcy fund advice, provide tailored investment advice.
     Consider the user's financial goals, risk tolerance, and investment horizon when making your recommendations.
     Mostly stick to the mutual funds and ETFs as investment options.
     Prefer passive investment strategies over active ones.
@@ -36,11 +36,27 @@ investment_task:
   agent: investment_advisor
   context:
     - summarize_data_task
+    - emergency_fund_task
   output_file: output/investment_advice.md
+
+debt_task:
+  description: >
+    Based on the summarized user data and investment data provided in the context, provide tailored advice on managing and reducing debt.
+    Consider the user's income, expenses, and financial goals when making your recommendations.
+    Prioritize high-interest debt for repayment and suggest strategies for managing lower-interest debt.
+    Calculate all amounts in user's local currency.
+  expected_output: >
+    A comprehensive debt management plan that includes strategies for reducing debt, prioritizing repayments, and avoiding future debt accumulation. 
+    Include specific repayment plans and timelines where relevant. Seprately mention any assumptions made due to lack of information.
+  agent: debt_advisor
+  context:
+    - summarize_data_task
+    - investment_task
+  output_file: output/debt_advice.md
 
 insurance_task:
   description: >
-    Based on the summarized user data provided in the context, provide tailored insurance advice.
+    Based on the summarized user data, investment and debt data provided in the context, provide tailored insurance advice.
     Consider the user's financial situation, dependents, and potential risks when making your recommendations.
     Cover the main types of insurance: health, life, disability, property, and liability.
     Calculate all amounts in user's local currency.
@@ -49,11 +65,13 @@ insurance_task:
   agent: insurance_advisor
   context:
     - summarize_data_task
+    - investment_task
+    - debt_task
   output_file: output/insurance_advice.md
 
 financial_plan_report_task:
   description: >
-    Create a comprehensive financial plan report based on the advice provided by the data summarizer, emergency fund, investment, and insurance advisors.
+    Create a comprehensive financial plan report based on the advice provided by the data summarizer, emergency fund, investment, debt, and insurance advisors.
     Ensure the report is well-structured, easy to understand, and tailored to the user's unique financial situation and goals.
   expected_output: >
     A detailed financial plan report that synthesizes the advice from the various advisors into a cohesive document.
@@ -66,5 +84,6 @@ financial_plan_report_task:
     - summarize_data_task
     - emergency_fund_task
     - investment_task
+    - debt_task
     - insurance_task
   output_file: output/financial_plan_report.md
